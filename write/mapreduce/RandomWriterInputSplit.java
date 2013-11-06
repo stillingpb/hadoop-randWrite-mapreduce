@@ -26,7 +26,10 @@ public class RandomWriterInputSplit implements InputSplit {
 
 	@Override
 	public void write(DataOutput out) throws IOException {
-		out.writeUTF(file.getName());
+		// 尼玛，原来是这里错了，把file.toString()搞成file.getName()了
+		// out.writeUTF(file.getName());
+		out.writeUTF(file.toString());
+
 		out.writeLong(start);
 		out.writeLong(length);
 	}

@@ -5,13 +5,16 @@ import java.util.Iterator;
 
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reducer;
 import org.apache.hadoop.mapred.Reporter;
 
 public class RandomWriterReducer implements
-		Reducer<LongWritable, BytesWritable, LongWritable, BytesWritable> {
+		Reducer<LongWritable, BytesWritable, NullWritable, BytesWritable> {
+
+	private NullWritable nullKey = NullWritable.get();
 
 	@Override
 	public void configure(JobConf job) {
@@ -28,9 +31,9 @@ public class RandomWriterReducer implements
 	 */
 	@Override
 	public void reduce(LongWritable key, Iterator<BytesWritable> values,
-			OutputCollector<LongWritable, BytesWritable> output, Reporter reporter)
-			throws IOException {
+			OutputCollector<NullWritable, BytesWritable> output,
+			Reporter reporter) throws IOException {
 		while (values.hasNext())
-			output.collect(key, values.next());
+			output.collect(nullKey, values.next());
 	}
 }

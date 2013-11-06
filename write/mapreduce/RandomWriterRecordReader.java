@@ -31,8 +31,8 @@ public class RandomWriterRecordReader implements
 		this.pos = start;
 
 		file = split.getPath();
-		FileSystem fs = FileSystem.get(job);
-		in = fs.open(file);
+		FileSystem fs = file.getFileSystem(job);
+		in = fs.open(split.getPath());
 	}
 
 	@Override

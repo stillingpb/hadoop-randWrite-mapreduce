@@ -29,7 +29,7 @@ public class RandomWriterMapper implements
 			if (file == null || file.length != 1)
 				// throw exception;
 				;
-			FileInputStream in = new FileInputStream(file.toString());
+			FileInputStream in = new FileInputStream(file[0].toString());
 			List<Byte> list = new ArrayList<Byte>();
 			byte[] buffer = new byte[1024];
 			int len;

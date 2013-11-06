@@ -10,12 +10,12 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapred.FileInputFormat;
 import org.apache.hadoop.mapred.FileOutputFormat;
 import org.apache.hadoop.mapred.JobClient;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.TextOutputFormat;
-import org.apache.hadoop.util.GenericsUtil;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
@@ -49,8 +49,11 @@ public class RandomWriteUtil {
 			job.setInputFormat(RandomWriterInputFormat.class);
 			job.setOutputFormat(TextOutputFormat.class);
 
-			job.setOutputKeyClass(LongWritable.class);
+			job.setOutputKeyClass(NullWritable.class);
 			job.setOutputValueClass(BytesWritable.class);
+
+			job.setMapOutputKeyClass(LongWritable.class);
+			job.setMapOutputValueClass(BytesWritable.class);
 
 			DistributedCache.addCacheFile(new URI(cacheFile), job);
 			job.setLong("random.write.pos", pos);
@@ -165,10 +168,10 @@ public class RandomWriteUtil {
 
 		ToolRunner.run(conf, writer, null);
 
-//		fs.delete(des, false);
-//		fs.rename(new Path(TEMP_OUTPUT_FILE), des);
-//		//删除临时文件
-//		fs.delete(new Path(TEMP_DIR), true);
+		fs.delete(des, false);
+		fs.rename(new Path(TEMP_OUTPUT_FILE), des);
+		// 删除临时文件
+		fs.delete(new Path(TEMP_DIR), true);
 	}
 
 	private static final String TEMP_DIR = "/tmp/rand/write";
